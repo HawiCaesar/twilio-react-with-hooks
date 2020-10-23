@@ -1,11 +1,12 @@
 import React, { useState, useCallback } from "react";
+import { Lobby } from "./Lobby";
 
 export const VideoChat = () => {
   const [username, setUsername] = useState("");
   const [roomName, setRoomName] = useState("");
   const [token, setToken] = useState(null);
 
-  const handleUserNameChange = useCallback((event) => {
+  const handleUsernameChange = useCallback((event) => {
     setUsername(event.target.value);
   }, []);
 
@@ -16,7 +17,7 @@ export const VideoChat = () => {
   const handleSubmit = useCallback(
     async (event) => {
       event.preventDefault();
-      const data = await fetch("/video/token", {
+      const data = await fetch(`http://localhost:3001/video/token`, {
         method: "POST",
         body: JSON.stringify({
           identity: username,
@@ -26,15 +27,32 @@ export const VideoChat = () => {
           "Content-Type": "application/json",
         },
       }).then((res) => res.json());
-
       setToken(data.token);
     },
     [username, roomName]
   );
 
-  const handleLogout = useCallback((event) => {
-    setToken(null);
-  }, []);
+//   const handleLogout = useCallback((event) => {
+//     setToken(null);
+//   }, []);
 
-  return <div></div>;
+  if (token) {
+    return (
+      <div>
+        <p>Username: {username}</p>
+        <p>Room name: {roomName}</p>
+        <p>Token: {token}</p>
+      </div>
+    );
+  }
+
+  return (
+    <Lobby
+      username={username}
+      roomName={roomName}
+      handleRoomNameChange={handleRoomNameChange}
+      handleUsernameChange={handleUsernameChange}
+      handleSubmit={handleSubmit}
+    />
+  );
 };
