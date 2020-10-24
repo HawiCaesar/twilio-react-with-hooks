@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { Lobby } from "./Lobby";
+import { Room } from "./Room";
 
 export const VideoChat = () => {
   const [username, setUsername] = useState("");
@@ -32,17 +33,13 @@ export const VideoChat = () => {
     [username, roomName]
   );
 
-//   const handleLogout = useCallback((event) => {
-//     setToken(null);
-//   }, []);
+  const handleLogout = useCallback((event) => {
+    setToken(null);
+  }, []);
 
   if (token) {
     return (
-      <div>
-        <p>Username: {username}</p>
-        <p>Room name: {roomName}</p>
-        <p>Token: {token}</p>
-      </div>
+      <Room roomName={roomName} token={token} handleLogout={handleLogout} />
     );
   }
 
